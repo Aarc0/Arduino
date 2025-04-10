@@ -4,6 +4,8 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define SERVOSTOP 380
+#define SERVODERECHA 440
+#define SERVOIZQUIERDA 320
 
 #define servo_left 0
 #define servo_right 1
