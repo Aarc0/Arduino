@@ -20,7 +20,7 @@ void setup()
   pinMode(led_rojo,OUTPUT);
   pinMode(led_verde,OUTPUT);
   pinMode(Buttonpin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(Buttonpin),Desactivar_Alarma,RISING); //Si presiono al boton allamo a la función del medio
+  attachInterrupt(digitalPinToInterrupt(Buttonpin),Desactivar_Alarma,RISING); //Si presiono al boton llamo a la función del medio
 }
 
 void loop() 
@@ -49,6 +49,3 @@ void loop()
     }     
 
 }
-    
-
-
