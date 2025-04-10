@@ -46,5 +46,6 @@ void loop()
     Serial.println("Segundo");
     pwm.setPWM(servo_left,0,SERVOIZQUIERDA);
     pwm.setPWM(servo_right,0,SERVODERECHA);
-  }*/
+  }*/ 
+ 
 }
