@@ -24,9 +24,13 @@ int servo_180 = 2; //El servo está conectado al canal 2
   //////////////////////////////////////////////////
  ////        DECLARACIÓN DE FUNCIONES          ////
 //////////////////////////////////////////////////
+void Correción(int I, int D)
+{
+  
 
 
 
+}
   //////////////////////////////////////////////////
  ////        FIN DECLARACIÓN FUNCIONES         ////
 //////////////////////////////////////////////////
@@ -48,6 +52,13 @@ void loop()
 {
   int IR_Izquierdo = digitalRead(IR_left);
   int IR_Derecho = digitalRead(IR_right);
+
+  /*
+    Variables para empezar la correción,
+    las variables almacenan la ultima dirección que corrigió
+  */
+  int I;
+  int D;
 
   /*
   Blanco = 1
@@ -95,22 +106,25 @@ void loop()
     //Con esto le digo que si el izquierdo ve blanco se vaya un poco a la derecha
     pwm.setPWM(servo_left,0,360);
     pwm.setPWM(servo_right,0,SERVOSTOP);
+    
+    I = IR_Izquierdo;
+    D = IR_Derecho;
   }
   else if(IR_Izquierdo == 0 && IR_Derecho == 1)
   {
     //Con esto le digo que si el izquierdo ve blanco se vaya un poco a la derecha
     pwm.setPWM(servo_left,0,SERVOSTOP);
     pwm.setPWM(servo_right,0,400);
+
+    I = IR_Izquierdo;
+    D = IR_Derecho;
   }
 
-  
- /*
+  //Si detecta blanco en ambos, se va a ir a la función de corrección
   else if(IR_Izquierdo == 1 && IR_Derecho == 1)
   {
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-  }
- 
- */ 
+    Correción(I,D);
+  } 
+  
 }
 
