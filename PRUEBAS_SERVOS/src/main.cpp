@@ -22,14 +22,22 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 int servo_180 = 2; //El servo está conectado al canal 2
 
   //////////////////////////////////////////////////
- ////        DECLARACIÓN DE FUNCIONES          ////
+ ////        INICIO DECLARACIÓN FUNCIONES      ////
 //////////////////////////////////////////////////
-void Correción(int I, int D)
+void Correcion(int I, int D)
 {
-  
-
-
-
+  if(I == 1 && D == 0)
+  {
+    //Con esto le digo que si el izquierdo ve blanco se vaya un poco a la derecha
+    pwm.setPWM(servo_left,0,360);
+    pwm.setPWM(servo_right,0,SERVOSTOP);
+  }
+  else if(I == 0 && D == 1)
+  {
+    //Con esto le digo que si el izquierdo ve blanco se vaya un poco a la derecha
+    pwm.setPWM(servo_left,0,SERVOSTOP);
+    pwm.setPWM(servo_right,0,400);
+  }
 }
   //////////////////////////////////////////////////
  ////        FIN DECLARACIÓN FUNCIONES         ////
@@ -55,12 +63,12 @@ void loop()
 
   /*
     Variables para empezar la correción,
-    las variables almacenan la ultima dirección que corrigió
+    las variables almacenan lo último que vio 
   */
   int I;
   int D;
-
   /*
+
   Blanco = 1
   Negro = 0
   */
@@ -123,7 +131,7 @@ void loop()
   //Si detecta blanco en ambos, se va a ir a la función de corrección
   else if(IR_Izquierdo == 1 && IR_Derecho == 1)
   {
-    Correción(I,D);
+    Correcion(I,D);
   } 
   
 }
