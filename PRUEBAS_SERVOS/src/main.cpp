@@ -13,6 +13,10 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define servo_left 0
 #define servo_right 1
 
+//LEDS
+#define red_led 12
+#define green_led 9 
+
 //INFRAROJOS
 #define IR_left 2
 #define IR_right 3
@@ -28,13 +32,15 @@ int servo_180 = 2; //El servo está conectado al canal 2
 int I;
 int D;
 
+//Variable para función de cambio de sentido
+boolean b = false;
+
   //////////////////////////////////////////////////
  ////        FUNCIÓN CAMBIO DE SENTIDO         ////
 //////////////////////////////////////////////////
 void direction_change()
 {
-  delay(2000);
-  pwm.setPWM(servo_180,0,SERVO_90deg);
+  b = true;
 }
 
 void setup() 
@@ -49,28 +55,48 @@ void setup()
   //Infrarojo derecho
   pinMode(IR_right,INPUT);
   
-  //Pulsador
-  pinMode(Buttonpin, INPUT);
+ 
+
+  //Leds
+  pinMode(red_led,OUTPUT);
+  pinMode(green_led,OUTPUT);
  
   pwm.begin();
   pwm.setPWMFreq(60);
-
-  attachInterrupt(digitalPinToInterrupt(11),direction_change,FALLING);
+  
+  //Pulsador
+  pinMode(Buttonpin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(Buttonpin),direction_change,RISING);
 }
 
 void loop() 
 {
+ int blanco = 1;
+ int negro = 0;
+
+  while(b)
+  {
+    pinMode(green_led,HIGH);
+    pwm.setPWM(servo_left,0,400);
+    pwm.setPWM(servo_right,0,SERVOSTOP); 
+    if(digitalRead(IR_right)==negro)
+    {
+      b = false;
+      pwm.setPWM(servo_left,0,SERVOSTOP);
+      pwm.setPWM(servo_right,0,SERVOSTOP);
+      pinMode(red_led,HIGH);
+      pinMode(green_led,LOW);
+    }
+  }
+  
+  Serial.print("Estado del booleano: ");
+  Serial.println(b);
   int IR_Izquierdo = digitalRead(IR_left);
   int IR_Derecho = digitalRead(IR_right);
   int luz = analogRead(A0);
   int correct;
 
-  /*
-    Variables para empezar la correción,
-    las variables almacenan lo último que vio 
-  */
-  int blanco = 1;
-  int negro = 0;
+ 
 
   if(luz < 200)
   {
@@ -84,7 +110,6 @@ void loop()
   {
     correct = 30;
   }
-
   //Con este bloque imprimo una linea entera con el valor de los IR en dicho momento
   /////////////////////////////////////////////
   Serial.print("IR_Izquierdo: ");
@@ -135,6 +160,7 @@ void loop()
     I = IR_Izquierdo;
     D = IR_Derecho;
   }
+
 }
 
   /*
