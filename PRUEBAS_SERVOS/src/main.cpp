@@ -33,7 +33,9 @@ int I;
 int D;
 
 //Variable para función de cambio de sentido
-boolean b = false;
+//Según la documentación de ardino que se encuentra en el siguiente enlace: https://www.arduino.cc/reference/cs/language/functions/external-interrupts/attachinterrupt/?_x_tr_hist=true
+//La variable tiene que ser declarada como volatil para estar seguros de que las variables compartidas entre un ISR y el programa principal se actualizan correctamente
+volatile boolean b = false;
 
   //////////////////////////////////////////////////
  ////        FUNCIÓN CAMBIO DE SENTIDO         ////
@@ -76,7 +78,7 @@ void loop()
 
   while(b)
   {
-    pinMode(green_led,HIGH);
+    digitalWrite(green_led,HIGH);
     pwm.setPWM(servo_left,0,400);
     pwm.setPWM(servo_right,0,SERVOSTOP); 
     if(digitalRead(IR_right)==negro)
@@ -84,8 +86,8 @@ void loop()
       b = false;
       pwm.setPWM(servo_left,0,SERVOSTOP);
       pwm.setPWM(servo_right,0,SERVOSTOP);
-      pinMode(red_led,HIGH);
-      pinMode(green_led,LOW);
+      digitalWrite(red_led,HIGH);
+      digitalWrite(green_led,LOW);
     }
   }
   
