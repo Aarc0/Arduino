@@ -17,8 +17,6 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define red_led 12
 #define green_led 9 
 
-
-
 //INFRAROJOS
 #define IR_left 2
 #define IR_right 3
