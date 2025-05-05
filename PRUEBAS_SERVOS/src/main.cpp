@@ -57,8 +57,6 @@ void setup()
   //Infrarojo derecho
   pinMode(IR_right,INPUT);
   
- 
-
   //Leds
   pinMode(red_led,OUTPUT);
   pinMode(green_led,OUTPUT);
@@ -73,32 +71,36 @@ void setup()
 
 void loop() 
 {
- int blanco = 1;
- int negro = 0;
-
-  while(b)
-  {
-    digitalWrite(green_led,HIGH);
-    pwm.setPWM(servo_left,0,400);
-    pwm.setPWM(servo_right,0,SERVOSTOP); 
-    if(digitalRead(IR_right)==negro)
-    {
-      b = false;
-      pwm.setPWM(servo_left,0,SERVOSTOP);
-      pwm.setPWM(servo_right,0,SERVOSTOP);
-      digitalWrite(red_led,HIGH);
-      digitalWrite(green_led,LOW);
-    }
-  }
-  
-  Serial.print("Estado del booleano: ");
-  Serial.println(b);
   int IR_Izquierdo = digitalRead(IR_left);
   int IR_Derecho = digitalRead(IR_right);
   int luz = analogRead(A0);
   int correct;
+  int blanco = 1;
+  int negro = 0;
 
- 
+  if(b)
+  {
+    pwm.setPWM(servo_left,0,320);
+    pwm.setPWM(servo_right,0,360);
+    delay(500);
+    while(digitalRead(IR_right) == blanco)
+    {
+      digitalWrite(red_led,LOW);
+      digitalWrite(green_led,HIGH);
+      pwm.setPWM(servo_left,0,360);
+      pwm.setPWM(servo_right,0,360);
+    }
+    if(digitalRead(IR_right)==negro)
+    {
+        digitalWrite(red_led,HIGH);
+        digitalWrite(green_led,LOW);
+        pwm.setPWM(servo_left,0,SERVOSTOP);
+        pwm.setPWM(servo_right,0,SERVOSTOP);
+        b=false;
+    }
+  }
+
+
 
   if(luz < 200)
   {
@@ -162,7 +164,6 @@ void loop()
     I = IR_Izquierdo;
     D = IR_Derecho;
   }
-
 }
 
   /*
