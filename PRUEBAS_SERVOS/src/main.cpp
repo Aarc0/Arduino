@@ -79,7 +79,6 @@ void loop()
   int correct;
   int blanco = 1;
   int negro = 0;
-  long duracion;
 
   if(b)
   {
@@ -102,24 +101,6 @@ void loop()
         b=false;
     }
   }
-
-  //DISPARADOR DE SONIDO
-  //////////////////////////////////////////////////////////
-  pinMode(pingPin,OUTPUT);
-  digitalWrite(pingPin, LOW);
-  delayMicroseconds(10);
-  digitalWrite(pingPin,HIGH); //Dispara el sonido
-  delayMicroseconds(10);
-  digitalWrite(pingPin,LOW); //Cierra el disparador
-  pinMode(pingPin,INPUT);
-  duracion = pulseIn(pingPin,INPUT);
-  cm = duracion /29 /2;
-  Serial.println("CM: ");
-  Serial.println(cm);
-  //////////////////////////////////////////////////////////
-  //Con esta parte de código solo mido la distancia al objeto en cm
-
-
   
   if(luz < 200)
   {
@@ -134,83 +115,7 @@ void loop()
     correct = 30;
   }
 
-  //La condición es que si la distancia al objeto que está en frente es menor a 10 cm, rodee el objeto
-  if(cm<10)
-  { 
-    //Primero quiero que una vez haya visto que el objeto está cerca, se pare
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    //Ahora la idea es que gire hacia la derecha (Ya que usualmente a la derecha queda el centro de la pista, así no tiramos al robot por el vacio)
-    //Ya que el tiempo de giro varía con la velocidad, creo que es mejor idea que la velocidad de giro sea constante a que cambie dependiendo de la luz
-    pwm.setPWM(servo_left,0,320);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-    delay(2000);
-
-    //Una vez que el robot ha girado, queremos que vuelva a pararse
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    //Luego queremos que avance hacia adelante para que evite el obstáculo, ¿Durante cuanto? Pues más o menos unos 3 segundos calculando que el objeto mide unos 10cm
-    pwm.setPWM(servo_left,0,320);
-    pwm.setPWM(servo_right,0,440);
-    delay(3000);
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    //Una vez tenemos el robot mirando hacia el centro, queremos que mire hacia la izquierda
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,440);
-    delay(2000);
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    //Luego para que evite totalmente al obstáculo y ya quede detrás de él, hacemos que vaya hacia adelante durante 3 segundos
-    pwm.setPWM(servo_left,0,320);
-    pwm.setPWM(servo_right,0,440);
-    delay(4000);
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    //Para que mire está vez para afuera de la mesa hacemos que gire a la izquierda
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,440);
-    delay(2000);
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    while(digitalRead(IR_left) != negro || digitalRead(IR_right) != negro)
-    {
-      //Con esto le decimos que lea constantemente los valores de los sensores infrarojos
-      //Y que mientras uno de ellos no lea negro, siga adelante, una vez uno de ellos lea negro tenemos algunas opciones
-      pwm.setPWM(servo_left,0,320);
-      pwm.setPWM(servo_right,0,440);
-    }
-    
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-    
-    //Primero tenemos la opción de que encuentre la linea por los dos sensores, por lo que el robot se quedaría parado sin hacer nada
-    //Para ello tenemos que hacer que llegue a la condición de ir hacia adelante
-    //La opción de ver la linea por los dos sensores es Negro-Negro
-    if(digitalRead(IR_left) == negro && digitalRead(IR_right) == negro)
-    {
-      //La cosa es que quiero que mientras el sensor derecho lea negro, se vaya un poco hacia la derecha
-      while(digitalRead(IR_right) != blanco)
-      {
-        //Hago que vaya lento para no pasarme mucho vaya
-        pwm.setPWM(servo_left,0,370);
-        pwm.setPWM(servo_right,0,390);
-      }
-
-      if(digitalRead(IR_left) == negro && digitalRead(IR_right) == blanco)
-      {
-        pwm.setPWM(servo_left,0,SERVOSTOP);
-        pwm.setPWM(servo_right,0,SERVOSTOP);
-      }
-    }
-  }
-
+ 
 
   //Con este bloque imprimo una linea entera con el valor de los IR en dicho momento
   /////////////////////////////////////////////
@@ -227,6 +132,7 @@ void loop()
     I = IR_Izquierdo;
     D = IR_Derecho;
   }
+  
   //Si ambos detectan negro
   if(IR_Izquierdo == negro && IR_Derecho == negro)
   {
@@ -247,7 +153,6 @@ void loop()
   }
   if(IR_Izquierdo == blanco && IR_Derecho == blanco)
   {
-    
     //Si lo último que vió fue blanco, negro tiene que ir a la derecha
     if(I == blanco && D == negro)
     {
