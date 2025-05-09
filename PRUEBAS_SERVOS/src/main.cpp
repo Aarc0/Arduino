@@ -34,6 +34,10 @@ int D;
 #define C4 262
 long cm;
 
+//Servo 180
+#define servo_45deg 420
+int servo_180 = 2;
+
 //Variable para función de cambio de sentido
 //Según la documentación de ardino que se encuentra en el siguiente enlace: https://www.arduino.cc/reference/cs/language/functions/external-interrupts/attachinterrupt/?_x_tr_hist=true
 //La variable tiene que ser declarada como volatil para estar seguros de que las variables compartidas entre un ISR y el programa principal se actualizan correctamente
@@ -42,12 +46,192 @@ volatile boolean b = false;
 //Variable para que empiece a buscar linea
 int line_found = 0;
 
-  //////////////////////////////////////////////////
- ////        FUNCIÓN CAMBIO DE SENTIDO         ////
-//////////////////////////////////////////////////
+//Comprobar terreno
+boolean check = false;
+
 void direction_change()
 {
   b = true;
+}
+
+void check_straight()
+{
+  int negro = 0;
+  pwm.setPWM(servo_left,0,SERVOLEFT);
+  pwm.setPWM(servo_right,0,SERVORIGHT);
+  delay(100);
+  if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+  {
+    pwm.setPWM(servo_left,0,SERVOSTOP);
+    pwm.setPWM(servo_right,0,SERVOSTOP);  
+    check = true;
+  }
+  else
+  {
+    delay(100);
+    if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+    {
+      pwm.setPWM(servo_left,0,SERVOSTOP);
+      pwm.setPWM(servo_right,0,SERVOSTOP);  
+      check = true;
+    }
+    else
+    {
+      delay(100);
+      if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+      {
+        pwm.setPWM(servo_left,0,SERVOSTOP);
+        pwm.setPWM(servo_right,0,SERVOSTOP);  
+        check = true;
+      }
+    }
+  }
+}
+
+void check_turn_left()
+{
+  int negro = 0;
+  pwm.setPWM(servo_left,0,SERVOSTOP);
+  pwm.setPWM(servo_right,0,SERVORIGHT);
+  delay(100);
+  if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+  {
+    pwm.setPWM(servo_left,0,SERVOSTOP);
+    pwm.setPWM(servo_right,0,SERVOSTOP);  
+    check = true;
+  }
+  else
+  {
+    pwm.setPWM(servo_left,0,SERVOSTOP);
+    pwm.setPWM(servo_right,0,SERVORIGHT);
+    delay(100);
+    if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+    {
+      pwm.setPWM(servo_left,0,SERVOSTOP);
+      pwm.setPWM(servo_right,0,SERVOSTOP);
+      check = true;      
+    }
+    else
+    {
+      pwm.setPWM(servo_left,0,SERVOSTOP);
+      pwm.setPWM(servo_right,0,SERVORIGHT);
+      delay(100);
+      if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+      {
+        pwm.setPWM(servo_left,0,SERVOSTOP);
+        pwm.setPWM(servo_right,0,SERVOSTOP);  
+        check = true;    
+      }
+      else
+      {
+        pwm.setPWM(servo_left,0,SERVOSTOP);
+        pwm.setPWM(servo_right,0,SERVORIGHT);
+        delay(100);
+        if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+        {
+          pwm.setPWM(servo_left,0,SERVOSTOP);
+          pwm.setPWM(servo_right,0,SERVOSTOP);  
+          check = true;    
+        }
+        else
+        {
+          pwm.setPWM(servo_left,0,SERVOSTOP);
+          pwm.setPWM(servo_right,0,SERVORIGHT);
+          delay(100);
+          if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+          {
+            pwm.setPWM(servo_left,0,SERVOSTOP);
+            pwm.setPWM(servo_right,0,SERVOSTOP); 
+            check = true;     
+          }
+          else
+          {
+            pwm.setPWM(servo_left,0,SERVOSTOP);
+            pwm.setPWM(servo_right,0,SERVORIGHT);
+            delay(100);
+            if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+            {
+              pwm.setPWM(servo_left,0,SERVOSTOP);
+              pwm.setPWM(servo_right,0,SERVOSTOP); 
+              check = true;     
+            }
+            else
+            {
+              pwm.setPWM(servo_left,0,SERVOSTOP);
+              pwm.setPWM(servo_right,0,SERVORIGHT);
+              delay(100);
+              if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+              {
+                pwm.setPWM(servo_left,0,SERVOSTOP);
+                pwm.setPWM(servo_right,0,SERVOSTOP);   
+                check = true;   
+              }
+              else
+              {
+                pwm.setPWM(servo_left,0,SERVOSTOP);
+                pwm.setPWM(servo_right,0,SERVORIGHT);
+                delay(100);
+                if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+                {
+                  pwm.setPWM(servo_left,0,SERVOSTOP);
+                  pwm.setPWM(servo_right,0,SERVOSTOP);
+                  check = true;      
+                }
+                else
+                {
+                  pwm.setPWM(servo_left,0,SERVOSTOP);
+                  pwm.setPWM(servo_right,0,SERVORIGHT);
+                  delay(100);
+                  if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+                  {
+                    pwm.setPWM(servo_left,0,SERVOSTOP);
+                    pwm.setPWM(servo_right,0,SERVOSTOP);  
+                    check = true;    
+                  }
+                  else
+                  {
+                    pwm.setPWM(servo_left,0,SERVOSTOP);
+                    pwm.setPWM(servo_right,0,SERVORIGHT);
+                    delay(100);
+                    if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+                    {
+                      pwm.setPWM(servo_left,0,SERVOSTOP);
+                      pwm.setPWM(servo_right,0,SERVOSTOP);  
+                      check = true;    
+                    }
+                    else
+                    {
+                      pwm.setPWM(servo_left,0,SERVOSTOP);
+                      pwm.setPWM(servo_right,0,SERVORIGHT);
+                      delay(100);
+                      if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+                      {
+                        pwm.setPWM(servo_left,0,SERVOSTOP);
+                        pwm.setPWM(servo_right,0,SERVOSTOP); 
+                        check = true;     
+                      }
+                      else
+                      {
+                        pwm.setPWM(servo_left,0,SERVOSTOP);
+                        pwm.setPWM(servo_right,0,SERVORIGHT);
+                        delay(100);
+                        if(digitalRead(IR_left)==negro||digitalRead(IR_right)==negro)
+                        {
+                          pwm.setPWM(servo_left,0,SERVOSTOP);
+                          pwm.setPWM(servo_right,0,SERVOSTOP);  
+                          check = true;    
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 int m_distance()
@@ -93,6 +277,7 @@ void setup()
 
 void loop() 
 {
+  pwm.setPWM(servo_180,0,servo_45deg);
   long startTime = millis();
   int IR_Izquierdo = digitalRead(IR_left);
   int IR_Derecho = digitalRead(IR_right);
@@ -102,8 +287,9 @@ void loop()
   int negro = 0;
 
   int distance = m_distance();
-  if(distance<15)
+  if(distance<=10)
   {
+    check = false;
     tone(BuzzPinn,C4);
     pwm.setPWM(servo_left,0,SERVOSTOP);
     pwm.setPWM(servo_right,0,SERVOSTOP);
@@ -116,32 +302,40 @@ void loop()
     pwm.setPWM(servo_left,0,SERVOSTOP);
     pwm.setPWM(servo_right,0,SERVOSTOP);
 
-    //LUEGO CUANDO ESTÁ MIRANDO A LA DERECHA TIENE QUE IR PARA ADELANTE POR 0.3 SEGUNDOS
-    pwm.setPWM(servo_left,0,SERVOLEFT);
-    pwm.setPWM(servo_right,0,SERVORIGHT);
-    delay(300);
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    //LUEGO TIENE QUE GIRAR A LA IZQUIERDA
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVORIGHT);
-    delay(1200);
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-
-    //MIENTRAS QUE NO DETECTE NEGRO TIENE QUE IR HACIA ADELANTE
-    while(digitalRead(IR_left) != negro || digitalRead(IR_right) != negro)
+    //LUEGO CUANDO ESTÁ MIRANDO A LA DERECHA TIENE QUE IR PARA ADELANTE POR 0.2 SEGUNDOS-
+    check_straight();
+    if(check ==false)
     {
-      pwm.setPWM(servo_left,0,320);
-      pwm.setPWM(servo_right,0,440);
+      pwm.setPWM(servo_left,0,SERVOSTOP);
+      pwm.setPWM(servo_right,0,SERVOSTOP);
+      check_turn_left();
+      if(check == false)
+      {
+        pwm.setPWM(servo_left,0,SERVOSTOP);
+        pwm.setPWM(servo_right,0,SERVOSTOP);
+        check_straight();
+        if(check == false)
+        {
+          pwm.setPWM(servo_left,0,SERVOSTOP);
+          pwm.setPWM(servo_right,0,SERVOSTOP);
+          check_turn_left();
+          if(check==false)
+          {
+            while(digitalRead(IR_left)==blanco && digitalRead(IR_right)==blanco)
+            {
+              pwm.setPWM(servo_left,0,SERVOLEFT);
+              pwm.setPWM(servo_right,0,SERVORIGHT);
+            }
+              pwm.setPWM(servo_left,0,SERVOSTOP);
+              pwm.setPWM(servo_right,0,SERVOSTOP);
+          }
+        }
+      }
     }
-
+    
     //Si se para significa que por uno de los dos sensores leyó negro
-    pwm.setPWM(servo_left,0,SERVOSTOP);
-    pwm.setPWM(servo_right,0,SERVOSTOP);
-    //En los casos de que uno detecte negro y el otro blanco ya se contemplan 
-    //fuera de la condición, por eso no hace falta tratarlas aquí dentro
+    
+
 
     //Pero aún queda la condición de que los dos detecten negro en cuanto vayan para adelante
     if(digitalRead(IR_left) == negro && digitalRead(IR_right) == negro)
@@ -150,8 +344,8 @@ void loop()
       while(digitalRead(IR_right) != blanco)
       {
         //Hago que vaya lento para no pasarme mucho vaya
-        pwm.setPWM(servo_left,0,370);
-        pwm.setPWM(servo_right,0,390);
+        pwm.setPWM(servo_left,0,360);
+        pwm.setPWM(servo_right,0,SERVOSTOP);
       }
 
       //En este caso significa que el izquierdo lea negro y el derecho blanco que es lo que quiero
@@ -231,7 +425,7 @@ void loop()
   
   if(luz < 200)
   {
-    correct = 10;
+    correct = 20;
   }
   else if(luz >=200 && luz <= 500)
   {
@@ -239,7 +433,7 @@ void loop()
   }
   else if(luz >500)
   {
-    correct = 30;
+    correct = 40;
   }
   //Con este bloque imprimo una linea entera con el valor de los IR en dicho momento
   /////////////////////////////////////////////
